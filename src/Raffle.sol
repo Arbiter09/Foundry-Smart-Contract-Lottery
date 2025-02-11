@@ -134,7 +134,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     // 1. Get a random Number
     // 2. Use random number to pick a player
     // 3. Be automatically called -> ChainLink Automation
-    function performUpkeep() external {
+    function performUpkeep(bytes calldata /* performData */) external {
         // check to see if enough time has passed
         (bool upkeepNeeded, ) = checkUpkeep("");
         if (!upkeepNeeded) {
@@ -167,7 +167,8 @@ contract Raffle is VRFConsumerBaseV2Plus {
     // CEI: Checks, Effects, Interactions Pattern
     function fulfillRandomWords(
         uint256,
-        /*requestId*/ uint256[] calldata randomWords
+        /*requestId*/
+        uint256[] calldata randomWords
     ) internal override {
         // Checks (We Dont have checks in this function)
         // -> conditionals (Example: require)
@@ -197,5 +198,9 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
     function getRaffleState() external view returns (RaffleState) {
         return s_raffleState;
+    }
+
+    function getPlayer(uint256 indexOfPlayer) external view returns (address) {
+        return s_players[indexOfPlayer];
     }
 }
